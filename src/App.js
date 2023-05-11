@@ -19,9 +19,16 @@ class App extends React.Component{
           telephone:["102983012983","98123791"]
         },
       ],
-      className: "T2203E"
+      className: "T2203E",
+      new_student:{
+        name:"",
+        mark:0,
+        telephone:""
+      }
     }
     this.changeClassName = this.changeClassName.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.submitStudent = this.submitStudent.bind(this);
   }
   changeClassName(event){
       const v = event.target.value;
@@ -29,9 +36,28 @@ class App extends React.Component{
         className:v
       })
   }
+
+  handleInput(event){
+    const input = event.target;
+    const new_student = this.state.new_student;
+    new_student[input.name] = input.value;
+  
+    this.setState({
+      new_student: new_student
+    })
+  }
+  submitStudent(event){
+    event.preventDefault();
+    const new_student = this.state.new_student;
+    new_student.telephone = [new_student.telephone];
+    const students = this.state.students;
+    students.push(new_student);
+    this.setState({students:students});
+  }
   render(){ 
     const students = this.state.students;
     const className = this.state.className;
+    const new_student = this.state.new_student;
       return (
         <div className="App">
           <h1>Danh sach sinh vien lop {className}</h1>
@@ -42,7 +68,15 @@ class App extends React.Component{
          }
            <hr/>
            <input type='text' onChange={this.changeClassName} value={className} placeholder='Enter class name'></input>
-           
+           <hr/>
+           <h2>them sinh vien</h2>
+           <form method='post' onSubmit={this.submitStudent}> 
+            <input name='name' onChange={this.handleInput} value={new_student.name} type='text' placeholder='name'/>
+            <input name='mark' onChange={this.handleInput} value={new_student.mark} type='number' placeholder='mark'/>
+            <input name='telephone' onChange={this.handleInput} value={new_student.telephone} type='text' placeholder='telephone'/>
+            <button type='submit'>submit</button>
+           </form>
+           <hr/>
         </div>
       );
   }
